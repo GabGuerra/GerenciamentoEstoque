@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GerenciamentoEstoque.Models.Produto
 {
-    public class ProdutoVD : IProduto
+    public interface IProduto
     {
         public int CodProduto { get; set; }
         public string NomeProduto { get; set; }
