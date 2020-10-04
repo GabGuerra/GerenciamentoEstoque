@@ -22,6 +22,11 @@ namespace GerenciamentoEstoque.Controllers.Movimentacao
             _movimentacaoService = movimentacaoService;
             _produtoService = produtoService;
         }
+        [HttpGet]
+        public IActionResult Main()
+        {
+            return View("Main");
+        }
 
         [HttpPost]
         public JsonResult MovimentarProdutos(DocumentoVD docMov)
