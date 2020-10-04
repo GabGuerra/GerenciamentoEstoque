@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace GerenciamentoEstoque
 {
+    [Route("api/[controller]/[action]")]
+    [ApiController]
     public class ProdutoController : Controller
     {
 
@@ -23,19 +25,16 @@ namespace GerenciamentoEstoque
             return View("ProdutoIndex");
         }
 
+        [HttpPost]
         public JsonResult InserirProduto(ProdutoVD produto)
         {
             return Json(_produtoService.InserirProduto(produto));
         }
 
-        public JsonResult EditarProduto(ProdutoVD produto)
+        [HttpDelete]
+        public JsonResult RemoverProduto(int codProduto)
         {
-            return Json(_produtoService.EditarProduto(produto));
-        }
-        public JsonResult RemoverProduto(ProdutoVD produto)
-        {
-
-            return Json(_produtoService.RemoverProduto(produto));
+            return Json(_produtoService.RemoverProduto(codProduto));
         }
 
         public IActionResult GridProdutos()

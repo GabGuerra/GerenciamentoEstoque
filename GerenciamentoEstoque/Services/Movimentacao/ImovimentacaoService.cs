@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace GerenciamentoEstoque.Services.Movimentacao
 {
-    public interface ImovimentacaoService
+    public interface IMovimentacaoService
     {
-        public ResultadoVD MovimentarProduto(Imovimentacao Movimentacao);        
+        public ResultadoVD MovimentarProdutos(MovimentacaoVD Movimentacao);
+        public ResultadoVD ListarMovimentacoesCliente(int Movimentacao);
+        public ResultadoVD GerarNotaFiscal(int codMovimentacao);
+
     }
 }

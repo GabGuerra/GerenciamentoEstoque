@@ -1,6 +1,6 @@
-﻿using GerenciamentoEstoque.Models.Deposito;
-using GerenciamentoEstoque.Models.Documento;
-using GerenciamentoEstoque.Models.Produto;
+﻿using GerenciamentoEstoque.Enums;
+using GerenciamentoEstoque.Models.Cliente;
+using GerenciamentoEstoque.Models.MovimentacaoDetalhe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,20 +8,19 @@ using System.Threading.Tasks;
 
 namespace GerenciamentoEstoque.Models.Movimentacao
 {
-    public class MovimentacaoVD: Imovimentacao
+    public class MovimentacaoVD
     {
-        public ProdutoVD Produto { get; set; }
-        public DepositoVD Deposito { get; set; }
-        public int QtdMovimentacao { get; set; }
-        public DateTime DatMovimentacao { get; set; }
+        public int? CodMovimentacao { get; set; }
+        public DateTime? DatMovimentacao { get; set; }
         public TipoMovimentacaoVD TipoMovimentacao { get; set; }
-        public DocumentoVD Documento { get; set; }
+        public ClienteVD Cliente { get; set; }
+        public List<MovimentacaoDetalheVD> ListaMovimentacaoDetalhe { get; set; }
         public MovimentacaoVD()
         {
-            this.Produto = new ProdutoVD();
-            this.TipoMovimentacao = new TipoMovimentacaoVD();
-            this.Deposito = new DepositoVD();
-            this.Documento = new DocumentoVD();
+            Cliente = new ClienteVD();
+            ListaMovimentacaoDetalhe = new List<MovimentacaoDetalheVD>();
+            TipoMovimentacao = new TipoMovimentacaoVD();
+
         }
     }
 }

@@ -9,10 +9,11 @@ namespace GerenciamentoEstoque.Services.Produto
 {
     public interface IProdutoService
     {
-        public ResultadoVD InserirProduto(IProduto Produto);
-        public ResultadoVD EditarProduto(IProduto Produto);
-        public ResultadoVD RemoverProduto(IProduto Produto);
+        public ResultadoVD InserirProduto(ProdutoVD Produto);
+        public ResultadoVD EditarProduto(ProdutoVD Produto);
+        public ResultadoVD RemoverProduto(int codProduto);
         public List<ProdutoVD> CarregarListaProduto();
+        public void AtualizarPrecoCustoMedioProduto(int codProduto, double custoUnitarioMovimentacao, int qtdMovimentada);
 
     }
 }

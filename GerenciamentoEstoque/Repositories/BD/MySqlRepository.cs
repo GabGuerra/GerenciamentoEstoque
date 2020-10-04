@@ -10,7 +10,7 @@ namespace GerenciamentoEstoque.Repositories.BD
 {
     public abstract class MySqlRepository<T> where T : class
     {
-        private static MySqlConnection _conn;
+        internal static MySqlConnection _conn;
 
         public MySqlRepository(IConfiguration config)
         {
@@ -72,19 +72,19 @@ namespace GerenciamentoEstoque.Repositories.BD
             return registro;
         }
 
-        protected void ExecutarComando(MySqlCommand cmd)
-        {
+        protected int ExecutarComando(MySqlCommand cmd)
+        {            
             cmd.Connection = _conn;
             cmd.CommandType = CommandType.Text;
             _conn.Open();
             try
             {
-                cmd.ExecuteNonQuery();
-            }
+                return cmd.ExecuteNonQuery();
+            }          
             finally
             {
                 _conn.Close();
-            }
+            }                        
         }
     }
 }

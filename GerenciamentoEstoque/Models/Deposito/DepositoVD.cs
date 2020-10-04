@@ -12,5 +12,10 @@ namespace GerenciamentoEstoque.Models.Deposito
         public string NomeDeposito { get; set; }
         public LocalFisicoVD LocalFisico { get; set; }
         public TipoDepositoVD TipoDeposito { get; set; }
+        public DepositoVD()
+        {
+            LocalFisico = new LocalFisicoVD();
+            TipoDeposito = new TipoDepositoVD();
+        }
     }
 }

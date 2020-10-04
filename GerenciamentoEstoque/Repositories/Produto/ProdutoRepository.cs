@@ -15,22 +15,21 @@ namespace GerenciamentoEstoque.Repositories.Produto
         {
         }
 
-        public void InserirProduto(IProduto produto)
+        public void InserirProduto(ProdutoVD produto)
         {
             var sql = @"INSERT INTO PRODUTO
-                        (NOME_PRODUTO,PRECO_CUSTO_MEDIO,COD_FORNECEDOR,COD_UNIDADE_MEDIDA) 
+                        (NOME_PRODUTO,COD_FORNECEDOR,COD_UNIDADE_MEDIDA) 
                                                     VALUES
-                       (@NOME_PRODUTO, @PRECO_CUSTO_MEDIO,null,@COD_UNIDADE_MEDIDA);";
+                       (@NOME_PRODUTO,@COD_FORNECEDOR,@COD_UNIDADE_MEDIDA);";
             using (var command = new MySqlCommand(sql))
             {
                 command.Parameters.AddWithValue("NOME_PRODUTO", produto.NomeProduto);
-                command.Parameters.AddWithValue("PRECO_CUSTO_MEDIO", produto.PrecoCustoMedio);
-                //command.Parameters.AddWithValue("COD_FORNECEDOR", produto.Fo); CRIAR FORNECEDOR
+                command.Parameters.AddWithValue("COD_FORNECEDOR", produto.Fornecedor.CodFornecedor); 
                 command.Parameters.AddWithValue("COD_UNIDADE_MEDIDA", produto.UnidadeMedida.CodUnidadeMedida);
                 ExecutarComando(command);
             }
         }
-        public void EditarProduto(IProduto produto)
+        public void EditarProduto(ProdutoVD produto)
         {
             var sql = @"UPDATE PRODUTO M SET 
                         M.NOME_PRODUTO = @NOME_PRODUTO
@@ -44,12 +43,12 @@ namespace GerenciamentoEstoque.Repositories.Produto
                 ExecutarComando(command);
             }
         }
-        public void RemoverProduto(IProduto produto)
+        public void RemoverProduto(int codProduto)
         {
             var sql = @"DELETE FROM PRODUTO WHERE COD_PRODUTO = @COD_PRODUTO";
             using (var command = new MySqlCommand(sql))
             {
-                command.Parameters.AddWithValue("COD_PRODUTO", produto.CodProduto);
+                command.Parameters.AddWithValue("COD_PRODUTO", codProduto);
                 ExecutarComando(command);
             }
         }
@@ -67,6 +66,20 @@ namespace GerenciamentoEstoque.Repositories.Produto
             }
 
             return lista;
+        }
+
+             public void AtualizarPrecoCustoMedioProduto(int codProduto, double custoUnitarioMovimentacao, int qtdMovimentada) 
+        {
+            var sql = @"CALL PROC_ATUALIZA_PRECO_MED_PRODUTO(@P_COD_PRODUTO, @P_CUSTO_UNITARIO_MOV_ATUAL, @P_QTD_MOV_ATUAL)";
+
+            using (var cmd = new MySqlCommand(sql))
+            {
+                cmd.Parameters.AddWithValue("@P_COD_PRODUTO", codProduto);
+                cmd.Parameters.AddWithValue("@P_CUSTO_UNITARIO_MOV_ATUAL", custoUnitarioMovimentacao);
+                cmd.Parameters.AddWithValue("@P_QTD_MOV_ATUAL", qtdMovimentada);
+
+                ExecutarComando(cmd);
+            }
         }
 
         public override ProdutoVD PopularDados(MySqlDataReader dr)

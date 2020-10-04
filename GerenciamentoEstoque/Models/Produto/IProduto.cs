@@ -8,7 +8,7 @@ namespace GerenciamentoEstoque.Models.Produto
 {
     public interface IProduto
     {
-        public int CodProduto { get; set; }
+        public int? CodProduto { get; set; }
         public string NomeProduto { get; set; }
         public double PrecoCustoMedio { get; set; }
         public UnidadeMedidaVD UnidadeMedida { get; set; }

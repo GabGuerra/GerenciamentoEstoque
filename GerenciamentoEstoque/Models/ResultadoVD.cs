@@ -9,7 +9,7 @@ namespace GerenciamentoIdentidadeCore2.Models
     {
         public bool Sucesso { get; set; }
         public string Mensagem { get; set; }
-        public object ObjetoResultado { get; set; }
+        public object Resultado { get; set; }
 
         public ResultadoVD(bool sucesso, string mensagem)
         {

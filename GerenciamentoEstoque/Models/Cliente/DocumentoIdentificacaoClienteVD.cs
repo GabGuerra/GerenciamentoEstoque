@@ -7,9 +7,11 @@ namespace GerenciamentoEstoque.Models.Cliente
 {
     public class DocumentoIdentificacaoClienteVD
     {
-        public int CodDocumentoIdentificacao { get; set; }
         public string NumeroDocumento { get; set; }
-        public ClienteVD Cliente { get; set; }
-        public TipoDocumentoIdentificacaoCliente TipoDocumento {get;set ;}
+        public TipoDocumentoIdentificacaoCliente TipoDocumento { get; set; }
+        public DocumentoIdentificacaoClienteVD()
+        {
+            TipoDocumento = new TipoDocumentoIdentificacaoCliente();
+        }
     }
 }

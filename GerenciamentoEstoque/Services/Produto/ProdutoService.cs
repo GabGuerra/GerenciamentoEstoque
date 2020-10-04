@@ -15,7 +15,7 @@ namespace GerenciamentoEstoque.Services.Produto
         {
             _produtoRepository = produtoRepository;
         }
-        public ResultadoVD InserirProduto(IProduto produto)
+        public ResultadoVD InserirProduto(ProdutoVD produto)
         {
             ResultadoVD resultado = new ResultadoVD(true);
 
@@ -37,7 +37,7 @@ namespace GerenciamentoEstoque.Services.Produto
             return _produtoRepository.CarregarListaProduto();
         }
 
-        public ResultadoVD EditarProduto(IProduto produto)
+        public ResultadoVD EditarProduto(ProdutoVD produto)
         {
             ResultadoVD resultado = new ResultadoVD(true);
 
@@ -53,13 +53,14 @@ namespace GerenciamentoEstoque.Services.Produto
 
             return resultado;
         }
-        public ResultadoVD RemoverProduto(IProduto produto)
+        
+        public ResultadoVD RemoverProduto(int codProduto)
         {
             ResultadoVD resultado = new ResultadoVD(true);
 
             try
             {
-                _produtoRepository.RemoverProduto(produto);
+                _produtoRepository.RemoverProduto(codProduto);
             }
             catch (Exception ex)
             {
@@ -69,5 +70,10 @@ namespace GerenciamentoEstoque.Services.Produto
 
             return resultado;
         }
+
+        public void AtualizarPrecoCustoMedioProduto(int codProduto, double custoUnitarioMovimentacao, int qtdMovimentada) 
+        {
+            _produtoRepository.AtualizarPrecoCustoMedioProduto(codProduto, custoUnitarioMovimentacao, qtdMovimentada);
+        } 
     }
 }
