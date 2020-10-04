@@ -1,4 +1,5 @@
 ﻿using GerenciamentoEstoque.Enums;
+using GerenciamentoEstoque.Models.Documento;
 using GerenciamentoEstoque.Models.Movimentacao;
 using GerenciamentoEstoque.Services.Movimentacao;
 using GerenciamentoEstoque.Services.Produto;
@@ -23,14 +24,14 @@ namespace GerenciamentoEstoque.Controllers.Movimentacao
         }
 
         [HttpPost]
-        public JsonResult MovimentarProdutos(MovimentacaoVD mov)
+        public JsonResult MovimentarProdutos(DocumentoVD docMov)
         {
-            if (mov.TipoMovimentacao.CodTipoMovimentacao == EnumTipoMovimentacao.EntradaPorCompra.GetHashCode())
+            if (docMov.TipoDocumento.CodTipoDocumento == EnumTipoDocumento.EntradaPorCompra.GetHashCode())
             {
-                foreach (var item in mov.ListaMovimentacaoDetalhe)
+                foreach (var item in docMov.ListaMovimentacaoDetalhe)
                     _produtoService.AtualizarPrecoCustoMedioProduto(item.Produto.CodProduto.Value, item.PrecoUnitarioMovimentacao, item.QtdMovimentacao);
             }
-            return Json(_movimentacaoService.MovimentarProdutos(mov));
+            return Json(_movimentacaoService.MovimentarProdutos(docMov));
         }
 
 

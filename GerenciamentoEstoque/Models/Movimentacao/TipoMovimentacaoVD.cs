@@ -5,22 +5,22 @@ using System.Threading.Tasks;
 
 namespace GerenciamentoEstoque.Models.Movimentacao
 {
-    public class TipoMovimentacaoVD
+    public class TipoDocumentoVD
     {
-        public int CodTipoMovimentacao { get; set; }
-        public string DscTipoMovimentacao { get; set; }
-        public TipoMovimentacaoVD()
+        public int CodTipoDocumento { get; set; }
+        public string DscTipoDocumento { get; set; }
+        public TipoDocumentoVD()
         {
 
         }
-        public TipoMovimentacaoVD(int codTipoMovimentacao, string dscTipoMovimentacao)
+        public TipoDocumentoVD(int codTipoDocumento, string dscTipoDocumento)
         {
-            CodTipoMovimentacao = codTipoMovimentacao;
-            DscTipoMovimentacao = dscTipoMovimentacao;
+            CodTipoDocumento = codTipoDocumento;
+            DscTipoDocumento = dscTipoDocumento;
         }
-        public TipoMovimentacaoVD(string dscTipoMovimentacao)
+        public TipoDocumentoVD(string dscTipoDocumento)
         {
-            DscTipoMovimentacao = dscTipoMovimentacao;
+            DscTipoDocumento = dscTipoDocumento;
         }
     }
 }

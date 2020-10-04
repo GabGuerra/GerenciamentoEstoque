@@ -1,4 +1,5 @@
-﻿using GerenciamentoEstoque.Models.Movimentacao;
+﻿using GerenciamentoEstoque.Models.Documento;
+using GerenciamentoEstoque.Models.Movimentacao;
 using GerenciamentoIdentidadeCore2.Models;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,8 @@ namespace GerenciamentoEstoque.Repositories.Movimentacao
 {
     public interface IMovimentacaoRepository
     {
-        public ResultadoVD MovimentarProdutos(MovimentacaoVD Movimentacao);
-        public List<MovimentacaoVD> ListarMovimentacoesCliente(int codCliente);
-        public MovimentacaoVD GerarNotaFiscal(int codCliente);
+        public ResultadoVD MovimentarProdutos(DocumentoVD Movimentacao);
+        public List<DocumentoVD> ListarMovimentacoesCliente(int codCliente);
+        public DocumentoVD GerarNotaFiscal(int codCliente);
     }
 }

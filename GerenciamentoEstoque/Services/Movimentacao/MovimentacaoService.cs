@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GerenciamentoEstoque.Models.Documento;
 using GerenciamentoEstoque.Models.Movimentacao;
 using GerenciamentoEstoque.Repositories.Movimentacao;
 using GerenciamentoIdentidadeCore2.Models;
@@ -16,7 +17,7 @@ namespace GerenciamentoEstoque.Services.Movimentacao
         {
             _movimentacaoRepository = movimentacaoRepository;
         }
-        public ResultadoVD MovimentarProdutos(MovimentacaoVD Movimentacao)
+        public ResultadoVD MovimentarProdutos(DocumentoVD Movimentacao)
         {
             ResultadoVD resultado = new ResultadoVD();
             try
@@ -65,10 +66,10 @@ namespace GerenciamentoEstoque.Services.Movimentacao
         }
 
 
-        public string FormatarNotaFiscal(MovimentacaoVD nota) 
+        public string FormatarNotaFiscal(DocumentoVD nota) 
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"---------NOTA FISCAL DE {nota.TipoMovimentacao.DscTipoMovimentacao.ToUpper()}-----------");
+            sb.AppendLine($"---------NOTA FISCAL DE {nota.TipoDocumento.DscTipoDocumento.ToUpper()}-----------");
             sb.AppendLine($"Data:  {nota.DatMovimentacao.Value.ToLocalTime()}");
             sb.AppendLine($"Cliente: {nota.Cliente.NomeCliente}");
             sb.AppendLine($"{nota.Cliente.Documento.TipoDocumento.DscTipoDocumentoIdentificacao}:  {nota.Cliente.Documento.NumeroDocumento}");            

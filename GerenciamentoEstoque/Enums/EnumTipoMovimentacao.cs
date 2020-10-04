@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace GerenciamentoEstoque.Enums
 {
-    public enum EnumTipoMovimentacao
+    public enum EnumTipoDocumento
     {
         [Description("Entrada por compra")]
         EntradaPorCompra = 1,

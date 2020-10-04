@@ -19,14 +19,14 @@ using System.Threading.Tasks;
 
 namespace GerenciamentoEstoque.Repositories.Movimentacao
 {
-    public class MovimentacaoRepository : MySqlRepository<MovimentacaoVD>, IMovimentacaoRepository
+    public class MovimentacaoRepository : MySqlRepository<DocumentoVD>, IMovimentacaoRepository
     {
         public MovimentacaoRepository(IConfiguration config) : base(config)
         {
         }
 
         // INSERT NA TABELA MOVIMENTACAO_DETALHE
-        public ResultadoVD MovimentarProdutos(MovimentacaoVD movimentacao)
+        public ResultadoVD MovimentarProdutos(DocumentoVD movimentacao)
         {
             ResultadoVD resultado = new ResultadoVD(true);
             resultado.Sucesso = InserirMovimentacao(movimentacao) > 0;
@@ -38,26 +38,26 @@ namespace GerenciamentoEstoque.Repositories.Movimentacao
             return resultado;
         }
 
-        public int InserirMovimentacao(MovimentacaoVD mov)
+        public int InserirMovimentacao(DocumentoVD mov)
         {
 
-            var sql = @"INSERT INTO MOVIMENTACAO    
+            var sql = @"INSERT INTO DOCUMENTO    
                             (
                              COD_CLIENTE,
-                             DAT_MOVIMENTACAO,
-                             COD_TIPO_MOVIMENTACAO
+                             DAT_CRIACAO,
+                             COD_TIPO_DOCUMENTO
                             ) 
                         VALUES
                             (
                              @COD_CLIENTE,
                              CURDATE(),
-                             @COD_TIPO_MOVIMENTACAO
+                             @COD_TIPO_DOCUMENTO
                             )";
 
             using (var cmd = new MySqlCommand(sql))
             {
                 cmd.Parameters.AddWithValue("COD_CLIENTE", mov.Cliente.CodCliente);
-                cmd.Parameters.AddWithValue("COD_TIPO_MOVIMENTACAO", mov.TipoMovimentacao.CodTipoMovimentacao);
+                cmd.Parameters.AddWithValue("COD_TIPO_DOCUMENTO", mov.TipoDocumento.CodTipoDocumento);
 
                 return ExecutarComando(cmd);
             }
@@ -70,12 +70,12 @@ namespace GerenciamentoEstoque.Repositories.Movimentacao
                             (COD_PRODUTO,
                              COD_DEPOSITO,
                              QTD_MOVIMENTACAO,
-                             COD_MOVIMENTACAO)
+                             COD_DOCUMENTO)
 				        VALUES
                             (@COD_PRODUTO,
                              @COD_DEPOSITO,
                              @QTD_MOVIMENTACAO,
-                             (SELECT MAX(M.COD_MOVIMENTACAO) FROM MOVIMENTACAO M)
+                             (SELECT MAX(D.COD_DOCUMENTO) FROM DOCUMENTO D)
                             )";
             using (var cmd = new MySqlCommand(sql))
             {
@@ -87,23 +87,23 @@ namespace GerenciamentoEstoque.Repositories.Movimentacao
             }
         }   
 
-        public List<MovimentacaoVD> ListarMovimentacoesCliente(int codCliente)
+        public List<DocumentoVD> ListarMovimentacoesCliente(int codCliente)
         {
-            List<MovimentacaoVD> lista = new List<MovimentacaoVD>();
+            List<DocumentoVD> lista = new List<DocumentoVD>();
 
             string sql = @"
                             SELECT
 	                            C.NOME AS 'NOME_CLIENTE',    
                                 C.COD_CLIENTE,
                                 C.EMAIL AS 'EMAIL_CLIENTE',                        
-                                M.DAT_MOVIMENTACAO,
-                                M.COD_MOVIMENTACAO,
-                                TM.COD_TIPO_MOVIMENTACAO,
-                                TM.DSC_TIPO_MOVIMENTACAO                    
+                                D.DAT_MOVIMENTACAO,
+                                D.COD_MOVIMENTACAO,
+                                TD.COD_TIPO_DOCUMENTO,
+                                TD.DSC_TIPO_DOCUMENTO
                             FROM
-                                MOVIMENTACAO M                    
+                                DOCUMENTO D                    
                             INNER JOIN CLIENTE C ON M.COD_CLIENTE = C.COD_CLIENTE                    
-                            INNER JOIN TIPO_MOVIMENTACAO TM ON M.COD_TIPO_MOVIMENTACAO = TM.COD_TIPO_MOVIMENTACAO
+                            INNER JOIN TIPO_DOCUMENTO TD ON D.COD_TIPO_DOCUMENTO = TD.COD_TIPO_DOCUMENTO
                             WHERE
                                 C.COD_CLIENTE = @COD_CLIENTE";
 
@@ -116,9 +116,9 @@ namespace GerenciamentoEstoque.Repositories.Movimentacao
             return lista;
         }
 
-        public MovimentacaoVD GerarNotaFiscal(int codMovimentacao)
+        public DocumentoVD GerarNotaFiscal(int codMovimentacao)
         {
-            MovimentacaoVD movimentacao = new MovimentacaoVD();
+            DocumentoVD movimentacao = new DocumentoVD();
 
             string sql = @"SELECT
 	                            C.NOME AS 'NOME_CLIENTE',
@@ -128,14 +128,14 @@ namespace GerenciamentoEstoque.Repositories.Movimentacao
 	                            P.NOME_PRODUTO,
                                 MD.QTD_MOVIMENTACAO,
                                 M.DAT_MOVIMENTACAO,
-                                TM.DSC_TIPO_MOVIMENTACAO,
+                                TD.DSC_TIPO_DOCUMENTO,
                                 F.NOME_FILIAL,    
                                 LF.NOME_LOCAL_FISICO,                                    
                                 D.NOME_DEPOSITO                                
                            FROM
 	                            MOVIMENTACAO_DETALHE MD
                            INNER JOIN MOVIMENTACAO M ON MD.COD_MOVIMENTACAO = M.COD_MOVIMENTACAO
-                           INNER JOIN TIPO_MOVIMENTACAO TM ON M.COD_TIPO_MOVIMENTACAO = TM.COD_TIPO_MOVIMENTACAO
+                           INNER JOIN TIPO_DOCUMENTO TD ON D.COD_TIPO_DOCUMENTO = TD.COD_TIPO_DOCUMENTO
                            INNER JOIN PRODUTO_DEPOSITO PD ON (MD.COD_DEPOSITO = PD.COD_DEPOSITO AND MD.COD_PRODUTO = PD.COD_PRODUTO)
                            INNER JOIN PRODUTO P ON PD.COD_PRODUTO = P.COD_PRODUTO
                            INNER JOIN DEPOSITO D ON PD.COD_DEPOSITO = D.COD_DEPOSITO
@@ -161,7 +161,7 @@ namespace GerenciamentoEstoque.Repositories.Movimentacao
                             while (dr.Read())
                             {
                                 movimentacao.Cliente.NomeCliente = dr["NOME_CLIENTE"].ToString();
-                                movimentacao.TipoMovimentacao.DscTipoMovimentacao = dr["DSC_TIPO_MOVIMENTACAO"].ToString();
+                                movimentacao.TipoDocumento.DscTipoDocumento = dr["DSC_TIPO_DOCUMENTO"].ToString();
                                 movimentacao.Cliente.Documento.NumeroDocumento = dr["NUMERO_DOCUMENTO"].ToString();
                                 movimentacao.Cliente.Documento.TipoDocumento.DscTipoDocumentoIdentificacao = dr["DSC_TIPO_DOCUMENTO_IDENTIFICACAO"].ToString();
                                 movimentacao.ListaMovimentacaoDetalhe.Add(new MovimentacaoDetalheVD
@@ -187,7 +187,7 @@ namespace GerenciamentoEstoque.Repositories.Movimentacao
                                     QtdMovimentacao = Convert.ToInt32(dr["QTD_MOVIMENTACAO"])
                                 });
                                 movimentacao.DatMovimentacao = Convert.ToDateTime(dr["DAT_MOVIMENTACAO"]);
-                                movimentacao.TipoMovimentacao.DscTipoMovimentacao = dr["DSC_TIPO_MOVIMENTACAO"].ToString();
+                                movimentacao.TipoDocumento.DscTipoDocumento = dr["DSC_TIPO_DOCUMENTO"].ToString();
                             }
                         }
                         finally { dr.Close(); }
@@ -199,14 +199,14 @@ namespace GerenciamentoEstoque.Repositories.Movimentacao
             return movimentacao;
         }
 
-        public override MovimentacaoVD PopularDados(MySqlDataReader dr)
+        public override DocumentoVD PopularDados(MySqlDataReader dr)
         {
-            var mov = new MovimentacaoVD
+            var mov = new DocumentoVD
             {
                 Cliente = new ClienteVD(Convert.ToInt32(dr["COD_CLIENTE"]), dr["NOME_CLIENTE"].ToString(), dr["EMAIL_CLIENTE"].ToString()),
                 DatMovimentacao = Convert.ToDateTime(dr["DAT_MOVIMENTACAO"]),
                 CodMovimentacao = Convert.ToInt32(dr["COD_MOVIMENTACAO"]),
-                TipoMovimentacao = new TipoMovimentacaoVD(Convert.ToInt32(dr["COD_TIPO_MOVIMENTACAO"]), dr["DSC_TIPO_MOVIMENTACAO"].ToString())
+                TipoDocumento = new TipoDocumentoVD(Convert.ToInt32(dr["COD_TIPO_DOCUMENTO"]), dr["DSC_TIPO_DOCUMENTO"].ToString())
             };
 
             return mov;
